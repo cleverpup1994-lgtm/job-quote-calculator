@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Quote Calculator</title>
+  <meta name="description" content="Build a clean job quote for labor, materials and equipment, with contingency, markup, tax and deposit. Print or save as PDF.">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <header class="topbar no-print">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">▲</span>
+      <div>
+        <h1>Job Quote Calculator</h1>
+        <p>Labor, materials and equipment, quoted in minutes.</p>
+      </div>
+    </div>
+    <div class="actions">
+      <select id="saved" aria-label="Open a saved quote"><option value="">Saved quotes…</option></select>
+      <button type="button" id="btn-new" class="ghost">New</button>
+      <button type="button" id="btn-sample" class="ghost">Load sample</button>
+      <button type="button" id="btn-save">Save</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card no-print" aria-labelledby="h-details">
+      <h2 id="h-details">Job details</h2>
+      <div class="grid">
+        <label>Your company<input id="company" autocomplete="organization" placeholder="ATX Rigging & Steel"></label>
+        <label>Client<input id="client" placeholder="Client or company name"></label>
+        <label>Job site<input id="site" placeholder="Address or project name"></label>
+        <label>Quote #<input id="number" readonly></label>
+        <label>Date<input id="date" type="date"></label>
+        <label>Valid for (days)<input id="validDays" type="number" min="1" value="30"></label>
+      </div>
+      <label class="full">Scope of work<textarea id="scope" rows="3" placeholder="What's included, what isn't, access notes…"></textarea></label>
+    </section>
+
+    <section class="card no-print" aria-labelledby="h-items">
+      <div class="card-head">
+        <h2 id="h-items">Line items</h2>
+        <div class="add-buttons">
+          <button type="button" data-add="labor" class="chip">+ Labor</button>
+          <button type="button" data-add="material" class="chip">+ Material</button>
+          <button type="button" data-add="equipment" class="chip">+ Equipment</button>
+          <button type="button" data-add="other" class="chip">+ Other</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="items">
+          <thead>
+            <tr><th>Type</th><th>Description</th><th class="num">Qty</th><th>Unit</th><th class="num">Unit price</th><th class="num">Total</th><th><span class="sr-only">Remove</span></th></tr>
+          </thead>
+          <tbody id="items"></tbody>
+        </table>
+      </div>
+      <p id="empty" class="empty">No line items yet. Add labor, materials or equipment above.</p>
+    </section>
+
+    <section class="card no-print" aria-labelledby="h-terms">
+      <h2 id="h-terms">Pricing</h2>
+      <div class="grid four">
+        <label>Contingency %<input id="contingencyPct" type="number" min="0" max="100" step="0.5" value="5"></label>
+        <label>Overhead &amp; profit %<input id="markupPct" type="number" min="0" max="100" step="0.5" value="15"></label>
+        <label>Sales tax %<input id="taxPct" type="number" min="0" max="100" step="0.01" value="8.25"></label>
+        <label>Deposit %<input id="depositPct" type="number" min="0" max="100" step="5" value="30"></label>
+      </div>
+      <label class="check"><input id="taxLabor" type="checkbox"> Tax labor too</label>
+    </section>
+
+    <!-- The quote the client sees. This is also what prints. -->
+    <section class="card quote" id="quote" aria-labelledby="h-quote">
+      <div class="quote-head">
+        <div>
+          <h2 id="h-quote">Quote</h2>
+          <p class="muted" id="q-company"></p>
+        </div>
+        <div class="right">
+          <p><strong id="q-number"></strong></p>
+          <p class="muted" id="q-dates"></p>
+        </div>
+      </div>
+      <p><span class="muted">Prepared for</span> <strong id="q-client"></strong><span id="q-site"></span></p>
+      <p id="q-scope" class="scope"></p>
+
+      <table class="summary">
+        <tbody id="summary"></tbody>
+      </table>
+
+      <div class="total-row">
+        <span>Total</span>
+        <strong id="q-total">$0.00</strong>
+      </div>
+      <p class="muted" id="q-deposit"></p>
+
+      <div class="quote-actions no-print">
+        <button type="button" id="btn-print">Print / Save PDF</button>
+        <button type="button" id="btn-csv" class="ghost">Download CSV</button>
+        <button type="button" id="btn-delete" class="ghost danger">Delete saved</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <footer class="footer no-print">
+    Built by Abel Rios · <a href="https://github.com/cleverpup1994-lgtm/job-quote-calculator">Source on GitHub</a> ·
+    Quotes are saved only in this browser.
+  </footer>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
